@@ -1,0 +1,19 @@
+# 同步过程中产生的临时文件
+library/_text/.tmp_docx/
+scripts/_convert_jobs.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Word 打开时生成的临时锁文件
+~$*.docx
+~$*.doc
+
+# 操作系统杂项
+.DS_Store
+Thumbs.db
+desktop.ini

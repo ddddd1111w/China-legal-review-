@@ -1,0 +1,31 @@
+MIT License
+
+Copyright (c) 2026 legal-review skill contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+关于 library/ 内法律法规文本的说明：
+
+本仓库 library/ 目录中收录的宪法、法律、行政法规、监察法规、司法解释文本，
+均为中华人民共和国国家机关制定并通过国家法律法规数据库（https://flk.npc.gov.cn）
+公开的官方文件。根据《中华人民共和国著作权法》第五条，法律、法规，国家机关的
+决议、决定、命令和其他具有立法、行政、司法性质的文件，及其官方正式译文，
+不适用著作权法保护。该部分文本不属于上述 MIT 许可证的授权客体，任何人可自由
+使用，但应以官方公布的现行有效文本为准。

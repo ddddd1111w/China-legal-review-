@@ -1,0 +1,13 @@
+{
+  "library_root": "library",
+  "text_subdir": "_text",
+  "categories": [
+    "01-宪法",
+    "02-法律",
+    "03-行政法规",
+    "04-监察法规",
+    "05-司法解释"
+  ],
+  "manifest": "_manifests/final_manifest.json",
+  "notes": "可移植配置：library_root 为相对路径时，相对本 skill 根目录（scripts 的上一级）解析，默认指向 skill 自带的 library/ 文件夹，因此整个 skill 复制到任意机器/目录均可直接使用。若要改用外部文库，可：1) 把 library_root 改成绝对路径；或 2) 设置环境变量 LEGAL_REVIEW_LIBRARY 指向文库根目录（优先级更高）；或 3) 运行 sync_library.py 时加 --root。新增/替换 docx 或 doc 后运行 sync_library.py 重新生成 _text 与索引。"
+}
