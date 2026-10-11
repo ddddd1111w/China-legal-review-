@@ -37,12 +37,13 @@ description: 中华人民共和国法律法规文库检索与合法性审查助�
 | 文库状态/统计 | `python search_law.py status` |
 | 按名称找法律 | `python search_law.py titles 行政处罚` （默认只列最新版；`--cat 02-法律` 限分类；`--all` 含旧版；`--limit N`） |
 | 查看元数据/版本 | `python search_law.py info 行政处罚法` |
-| 全文检索条文 | `python search_law.py search 听证 行政拘留 [--cat 02-法律] [--law 治安管理处罚法] [--any] [--all-versions] [--limit 20]` |
-| 读某条原文 | `python search_law.py get 行政处罚法 --article 63`（支持 `63`、`六十三`、`63-65`） |
+| 全文检索条文 | `python search_law.py search 听证 行政拘留 [--cat 02-法律] [--law 治安管理处罚法] [--any] [--regex] [--all-versions] [--limit 20]` |
+| 读某条原文 | `python search_law.py get 行政处罚法 --article 63`（支持 `63`、`六十三`、`63-65`、`9,44,63`） |
 | 读结构与预览 | `python search_law.py get 行政强制法`（输出章节目录、条文总数与开头预览） |
 
 检索规则：
 - 多关键词默认"且"（全部命中），加 `--any` 改"或"；关键词用法律术语（"行政拘留""听证""加处罚款""法定代表人"），不要用口语长句。
+- 优先用 `--cat` 或 `--law` 限定范围：全库检索需遍历全部文本（秒级耗时），限定后即时返回；仅在无法确定部门法时才做全局检索。
 - 一个审查点通常要检索三类依据：**设定依据**（谁有权设定）、**实施依据**（条件/幅度/程序）、**程序依据**（告知/听证/时限/送达）。
 - `search` 输出的"路径"（形如 `_text\02-法律\XXX.txt`）相对文库根目录；需要完整原文时用 `get`，或用文件工具按 `<文库根>\<路径>` 打开。
 - 默认只检索各法最新文本；审查**历史行为**（行为发生在旧法期间）时加 `--all-versions`，并在意见中说明适用当时文本的理由。

@@ -11,10 +11,12 @@
   python search_law.py search 关键词... [--cat 分类] [--law 法律名] [--any] [--regex] [--limit N]
                                                              全文检索条文（默认多关键词为“且”）
   python search_law.py get  法律名关键词... [--article 条号]  读取目录/全文/指定条文
-                                                             （--article 支持 12、十二、12-15）
+                                                              （--article 支持 12、十二、12-15、9,44,63）
 
 输出为纯文本（UTF-8），所有结论均可按给出的 txt_rel 路径用文件工具打开原文核对。
 """
+
+from __future__ import annotations
 
 import argparse
 import json
@@ -199,7 +201,14 @@ def cmd_status(args, cfg, root, text_dir, records):
     print(f"分类导航：{text_dir / 'library-map.md'}")
 
 
+def check_cat(records: list[dict], cat: str | None) -> None:
+    """--cat 拼写错误时给出警告，避免被静默当成空作用域。"""
+    if cat and not any(r["category"] == cat for r in records):
+        print(f"[警告] 分类不存在: {cat}（可用分类见 status 输出）", file=sys.stderr)
+
+
 def cmd_titles(args, cfg, root, text_dir, records):
+    check_cat(records, args.cat)
     kws = args.keywords or []
     n = 0
     for r in records:
@@ -238,6 +247,7 @@ def compile_patterns(keywords, use_regex, use_any):
 
 
 def cmd_search(args, cfg, root, text_dir, records):
+    check_cat(records, args.cat)
     kws = args.keywords
     if not kws:
         die("search 至少需要一个关键词")
@@ -361,8 +371,7 @@ def cmd_get(args, cfg, root, text_dir, records):
         else:
             lo = hi = cn_to_int(part)
         if lo is None:
-            print(f"[错误] 无法解析条号“{part}”（原始输入 {args.article}）。支持形式：63、六十三、63-65、9,44,63。")
-            return
+            sys.exit(f"[错误] 无法解析条号“{part}”（原始输入 {args.article}）。支持形式：63、六十三、63-65、9,44,63。")
         if hi is None:
             hi = lo
         ranges.append((lo, hi))
@@ -400,7 +409,7 @@ def main():
     p_t.add_argument("keywords", nargs="*")
     p_t.add_argument("--cat")
     p_t.add_argument("--all", action="store_true", help="包含旧版文本")
-    p_t.add_argument("--limit", type=int, default=200)
+    p_t.add_argument("--limit", type=int, default=50)
 
     p_i = sub.add_parser("info")
     p_i.add_argument("name", nargs="+")
@@ -418,7 +427,7 @@ def main():
     p_g = sub.add_parser("get")
     p_g.add_argument("name", nargs="+")
     p_g.add_argument("--cat")
-    p_g.add_argument("--article", help="条号，如 12、十二、12-15")
+    p_g.add_argument("--article", help="条号，如 12、十二、12-15、9,44,63")
 
     args = ap.parse_args()
     cfg, root, text_dir, records = load_env()

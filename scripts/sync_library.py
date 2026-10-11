@@ -210,6 +210,9 @@ def main() -> int:
     if index_path.exists() and not args.full:
         try:
             for item in json.loads(index_path.read_text(encoding="utf-8")):
+                # 兼容旧版 Windows 构建的索引：路径分隔符统一归一为 /
+                item["source_file"] = item.get("source_file", "").replace("\\", "/")
+                item["txt_rel"] = item.get("txt_rel", "").replace("\\", "/")
                 old_index[item["source_file"]] = item
         except Exception:
             old_index = {}
@@ -234,13 +237,13 @@ def main() -> int:
 
     for src in sources:
         cat = src.parent.name
-        rel = f"{cat}\\{src.name}"
+        rel = f"{cat}/{src.name}"
         digest = sha1_of(src)
         cached = old_index.get(rel)
         rec = {
             "title": "", "category": cat, "flxz": CAT_FLXZ.get(cat, cat),
             "org": "", "publish_date": "", "effective_date": "",
-            "source_file": rel, "txt_rel": f"_text\\{cat}\\{src.stem}.txt",
+            "source_file": rel, "txt_rel": f"_text/{cat}/{src.stem}.txt",
             "sha1": digest, "chars": 0, "user_added": False,
         }
         official = manifest.get(src.name)
@@ -265,7 +268,8 @@ def main() -> int:
 
         if cached and cached.get("sha1") == digest and (root / cached["txt_rel"]).exists() and not args.full:
             rec["chars"] = cached.get("chars", 0)
-            rec["user_added"] = cached.get("user_added", rec["user_added"])
+            # user_added 一律以本次扫描结果为准（manifest 命中=False，未命中=True），
+            # 不回读缓存，避免文件后来进官方清单后仍残留〖补充〗标记
             records.append(rec)
             continue
 
@@ -295,7 +299,7 @@ def main() -> int:
 
     # 4) 抽取正文并写 txt ----------------------------------------------
     rec_by_src = {r["source_file"]: r for r in records}
-    todo: list[tuple[Path, Path | None, dict]] = [(p, p, rec_by_src[f"{p.parent.name}\\{p.name}"]) for p in pending_docx]
+    todo: list[tuple[Path, Path | None, dict]] = [(p, p, rec_by_src[f"{p.parent.name}/{p.name}"]) for p in pending_docx]
     for src, tmp, rec in pending_doc:
         err = doc_errors.get(str(src), "")
         rel = rec["source_file"]
@@ -339,7 +343,7 @@ def main() -> int:
         if not d.exists():
             continue
         for txt in d.glob("*.txt"):
-            rel = f"_text\\{cat}\\{txt.name}"
+            rel = f"_text/{cat}/{txt.name}"
             if rel not in valid_txt:
                 txt.unlink()
                 removed += 1

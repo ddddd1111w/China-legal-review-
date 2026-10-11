@@ -14,6 +14,8 @@ legal-review skill 共享路径与配置解析（sync_library.py / search_law.py
   4. 默认 <skill根>/library
 """
 
+from __future__ import annotations
+
 import json
 import os
 import re
